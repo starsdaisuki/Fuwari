@@ -1,61 +1,49 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Login</title>
+  <style>
+    body { font-family: Arial; padding: 40px; }
+    input { display: block; margin: 10px 0; padding: 8px; width: 250px; }
+    button { padding: 10px 20px; cursor: pointer; }
+  </style>
 </head>
 <body>
-  <h1>Login</h1>
+  <h1>Sign in</h1>
 
-  <input id="username" placeholder="username">
-  <input id="password" type="password" placeholder="password">
-  <button onclick="doLogin()">Login</button>
+  <input id="username" placeholder="username" />
+  <input id="password" type="password" placeholder="password" />
 
-  <h2>Register</h2>
-  <input id="reg-username" placeholder="new username">
-  <input id="reg-password" placeholder="new password">
-  <button onclick="doRegister()">Register</button>
+  <button id="login-btn">Sign in</button>
 
   <script>
-    const API_BASE = "https://astro-backend-u0jg.onrender.com";
+    // ===================================================
+    // 🟦 主人只需要改这里
+    // ===================================================
+    // const API = "http://localhost:3001";  
+    const API = "https://astro-backend-u0jg.onrender.com";  // ← 云端用这个
+    // ===================================================
 
-    async function doLogin() {
+    document.getElementById("login-btn").addEventListener("click", async () => {
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
 
-      const res = await fetch(API_BASE + "/login", {
+      const res = await fetch(API + "/login", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
       });
 
       const data = await res.json();
+
       if (data.success) {
-        alert("登录成功喵！（云端后端返回 success:true）");
-        // 比如跳回主页
+        alert("登录成功！");
         window.location.href = "/";
       } else {
-        alert("登录失败（后端返回 success:false 或出错）");
+        alert("用户名或密码错误~喵");
       }
-    }
-
-    async function doRegister() {
-      const username = document.getElementById("reg-username").value;
-      const password = document.getElementById("reg-password").value;
-
-      const res = await fetch(API_BASE + "/register", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ username, password })
-      });
-
-      const data = await res.json();
-      if (data.success) {
-        alert("注册成功喵～");
-      } else {
-        alert("注册失败（可能是后端/数据库没连好）");
-      }
-    }
+    });
   </script>
 </body>
 </html>

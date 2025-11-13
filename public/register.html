@@ -1,58 +1,38 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Register</title>
   <style>
-    body {
-      background: #111;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: sans-serif;
-    }
-    .box {
-      width: 320px;
-      padding: 30px;
-      background: #222;
-      border-radius: 12px;
-      box-shadow: 0 0 10px #000;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 8px;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      background: #0055ff;
-      border: none;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-    }
+    body { font-family: Arial; padding: 40px; }
+    input { display: block; margin: 10px 0; padding: 8px; width: 250px; }
+    button { padding: 10px 20px; cursor: pointer; }
+    a { display: block; margin-top: 15px; color: blue; }
   </style>
 </head>
 <body>
+  <h1>Create Account</h1>
 
-  <div class="box">
-    <h2>Register ~</h2>
-    <input id="username" placeholder="username">
-    <input id="password" type="password" placeholder="password">
-    <button onclick="doRegister()">sign up</button>
-  </div>
+  <input id="username" placeholder="username" />
+  <input id="password" type="password" placeholder="password" />
 
-  <script>
-    async function doRegister() {
-      const username = document.getElementById("username").value;
+  <button id="register-btn">Register</button>
+
+  <a href="/login.html">Already have an account? Login</a>
+
+  <!-- <script>
+    // ===================================================
+    // 🟦 主人只需要改这里（和 login.html 完全一样！）
+    // ===================================================
+    const API = "http://localhost:3001";  
+    
+    // ===================================================
+
+    document.getElementById("register-btn").addEventListener("click", async () => {
+      const username = document.getElementBygetElementById("username").value;
       const password = document.getElementById("password").value;
 
-      const res = await fetch("http://localhost:3001/register", {
+      const res = await fetch(API + "/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
@@ -61,13 +41,37 @@
       const data = await res.json();
 
       if (data.success) {
-        alert("注册成功喵！");
+        alert("注册成功喵！快去登录吧～");
         window.location.href = "/login.html";
       } else {
-        alert("注册失败喵：" + data.error);
+        alert("注册失败喵，请换一个用户名试试～");
       }
-    }
-  </script>
+    });
+  </script> -->
 
+
+  <script>
+  // const API = "http://localhost:3001";
+const API = "https://astro-backend-u0jg.onrender.com";  // 云端用这个
+  document.getElementById("register-btn").addEventListener("click", async () => {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    const res = await fetch(API + "/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert("注册成功喵！快去登录吧～");
+      window.location.href = "/login.html";
+    } else {
+      alert("注册失败喵，请换一个用户名试试～");
+    }
+  });
+</script>
 </body>
 </html>

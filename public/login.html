@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>登陆喵 ～</title>
+  <style>
+    body {
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: white;
+      font-family: sans-serif;
+    }
+    .box {
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    input {
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+    }
+    button {
+      padding: 10px;
+      border-radius: 6px;
+      background: #1e40af;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    #msg {
+      color: #f44;
+      text-align: center;
+      height: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <h2>登录喵 ～</h2>
+
+    <input id="user" placeholder="用户名">
+    <input id="pass" type="password" placeholder="密码">
+
+    <button id="btn">登录</button>
+
+    <div id="msg"></div>
+  </div>
+
+  <script>
+    document.getElementById("btn").onclick = async () => {
+      const username = document.getElementById("user").value;
+      const password = document.getElementById("pass").value;
+
+      const res = await fetch("http://localhost:3001/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
+
+      if (res.ok) {
+        // 登录成功 → 跳到网站主页（Fuwari 首页）
+        window.location.href = "/";
+      } else {
+        document.getElementById("msg").innerText = "喵呜～账号或密码不对喵！";
+      }
+    };
+  </script>
+
+</body>
+</html>

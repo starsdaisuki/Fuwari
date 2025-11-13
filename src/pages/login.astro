@@ -1,0 +1,60 @@
+---
+---
+
+<section class="login-container">
+  <h2>Sign in ~</h2>
+
+  <input id="user" placeholder="Username" class="login-input" />
+  <input id="pass" type="password" placeholder="Password" class="login-input" />
+
+  <button id="btn" class="login-btn">sign in</button>
+
+  <p id="msg" class="login-msg"></p>
+</section>
+
+<style>
+  .login-container {
+    max-width: 300px;
+    margin: 100px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-family: sans-serif;
+    text-align: center;
+  }
+  .login-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  .login-btn {
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background: #7aa2f7;
+    color: white;
+  }
+  .login-msg {
+    color: red;
+  }
+</style>
+
+<script is:inline>
+    console.log("login page loaded");
+  document.getElementById("btn").onclick = async () => {
+    const res = await fetch("http://localhost:3001/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: document.getElementById("user").value,
+        password: document.getElementById("pass").value
+      })
+    });
+
+    if (res.ok) {
+      window.location.href = "/";
+    } else {
+      document.getElementById("msg").innerText = "Wrong！";
+    }
+  };
+</script>

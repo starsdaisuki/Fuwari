@@ -1,78 +1,61 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>登陆喵 ～</title>
-  <style>
-    body {
-      background: #111;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      color: white;
-      font-family: sans-serif;
-    }
-    .box {
-      width: 300px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    input {
-      padding: 10px;
-      border-radius: 6px;
-      border: none;
-    }
-    button {
-      padding: 10px;
-      border-radius: 6px;
-      background: #1e40af;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    #msg {
-      color: #f44;
-      text-align: center;
-      height: 20px;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <title>Login</title>
 </head>
 <body>
+  <h1>Login</h1>
 
-  <div class="box">
-    <h2>登录喵 ～</h2>
+  <input id="username" placeholder="username">
+  <input id="password" type="password" placeholder="password">
+  <button onclick="doLogin()">Login</button>
 
-    <input id="user" placeholder="用户名">
-    <input id="pass" type="password" placeholder="密码">
-
-    <button id="btn">登录</button>
-
-    <div id="msg"></div>
-  </div>
+  <h2>Register</h2>
+  <input id="reg-username" placeholder="new username">
+  <input id="reg-password" placeholder="new password">
+  <button onclick="doRegister()">Register</button>
 
   <script>
-    document.getElementById("btn").onclick = async () => {
-      const username = document.getElementById("user").value;
-      const password = document.getElementById("pass").value;
+    const API_BASE = "https://astro-backend-u0jg.onrender.com";
 
-      const res = await fetch("http://localhost:3001/login", {
+    async function doLogin() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      const res = await fetch(API_BASE + "/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ username, password })
       });
 
-      if (res.ok) {
-        // 登录成功 → 跳到网站主页（Fuwari 首页）
+      const data = await res.json();
+      if (data.success) {
+        alert("登录成功喵！（云端后端返回 success:true）");
+        // 比如跳回主页
         window.location.href = "/";
       } else {
-        document.getElementById("msg").innerText = "喵呜～账号或密码不对喵！";
+        alert("登录失败（后端返回 success:false 或出错）");
       }
-    };
-  </script>
+    }
 
+    async function doRegister() {
+      const username = document.getElementById("reg-username").value;
+      const password = document.getElementById("reg-password").value;
+
+      const res = await fetch(API_BASE + "/register", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        alert("注册成功喵～");
+      } else {
+        alert("注册失败（可能是后端/数据库没连好）");
+      }
+    }
+  </script>
 </body>
 </html>

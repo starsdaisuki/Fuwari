@@ -17,12 +17,13 @@
 
   <button id="login-btn">Sign in</button>
 
+  <button id="register-btn" onclick="window.location.href='register.html'">Go to Register</button>
   <script>
     // ===================================================
     // 🟦 只需要改这里~
     // ==================================================
-    const API = "http://localhost:3001";  
-    // const API = "https://astro-backend-u0jg.onrender.com";  // ← 云端用这个
+    // const API = "http://localhost:3001";  
+    const API = "https://astro-backend-u0jg.onrender.com";  // ← 云端用这个
     // ===================================================
 
     document.getElementById("login-btn").addEventListener("click", async () => {

@@ -1,50 +1,193 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Login</title>
-  <style>
-    body { font-family: Arial; padding: 40px; }
-    input { display: block; margin: 10px 0; padding: 8px; width: 250px; }
-    button { padding: 10px 20px; cursor: pointer; }
-  </style>
+<meta charset="UTF-8" />
+<title>Sign in</title>
+
+<style>
+  /* ===========================
+     🌌 深色粒子背景（全屏）
+     =========================== */
+  body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: radial-gradient(circle at top, #1e1e2f 0%, #0a0a14 70%);
+    font-family: "Inter", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* 粒子 Canvas 在最底层 */
+  #bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+  }
+
+  /* ===========================
+     登录框
+     =========================== */
+  .card {
+    width: 380px;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(25px);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0); }
+  }
+
+  h1 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  /* ===========================
+     输入框
+     =========================== */
+  input {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+    transition: 0.25s;
+  }
+
+  input:focus {
+    background: rgba(255,255,255,0.18);
+    box-shadow: 0 0 10px #6a5acd;
+  }
+
+  /* ===========================
+     按钮
+     =========================== */
+  button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border: none;
+    font-size: 15px;
+    color: white;
+    background: linear-gradient(135deg, #6a5acd, #8a2be2);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.25s;
+  }
+
+  button:hover {
+    filter: brightness(1.2);
+    transform: translateY(-2px);
+  }
+
+  .link-btn {
+    background: rgba(255,255,255,0.12);
+    margin-top: 12px;
+  }
+</style>
 </head>
+
 <body>
+
+<canvas id="bg"></canvas>
+
+<div class="card">
   <h1>Sign in</h1>
 
   <input id="username" placeholder="username" />
   <input id="password" type="password" placeholder="password" />
 
   <button id="login-btn">Sign in</button>
+  <button class="link-btn" onclick="window.location.href='register.html'">Go to Register</button>
+</div>
 
-  <button id="register-btn" onclick="window.location.href='register.html'">Go to Register</button>
-  <script>
-    // ===================================================
-    // 🟦 只需要改这里~
-    // =======================miao ooo===========================
-    // const API = "http://localhost:3001";  
-    const API = "https://astro-backend-u0jg.onrender.com";  // ← 云端用这个
-    // ===================================================
+<script>
+  /* ===========================
+     ✨ 粒子背景动画
+     =========================== */
+  const canvas = document.getElementById("bg");
+  const ctx = canvas.getContext("2d");
 
-    document.getElementById("login-btn").addEventListener("click", async () => {
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 
-      const res = await fetch(API + "/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        alert("登录成功！");
-        window.location.href = "/";
-      } else {
-        alert("用户名或密码错误~喵");
-      }
+  const particles = [];
+  for (let i = 0; i < 80; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 2 + 1,
+      dx: (Math.random() - 0.5) * 0.4,
+      dy: (Math.random() - 0.5) * 0.4
     });
-  </script>
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255,255,255,0.7)";
+      ctx.fill();
+
+      p.x += p.dx;
+      p.y += p.dy;
+
+      if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+    });
+
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+
+  /* ===========================
+     登录逻辑
+     =========================== */
+
+  // const API = "http://localhost:3001";
+  const API = "https://astro-backend-u0jg.onrender.com"; // 云端用
+
+  document.getElementById("login-btn").addEventListener("click", async () => {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    const res = await fetch(API + "/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert("登录成功喵！");
+      window.location.href = "/index.html";
+    } else {
+      alert("登录失败喵！");
+    }
+  });
+</script>
+
 </body>
 </html>
